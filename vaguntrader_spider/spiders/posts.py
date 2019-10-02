@@ -37,5 +37,11 @@ class PostsSpider(scrapy.Spider):
 
        	print '\n############### CLOSING SPIDER ###############\n'
 
-       	next_page_url = response.urljoin('https://vaguntrader.com/forums/ubbthreads.php/forums/3/3/Handguns_-_VIRGINIA_ONLY/')
-       	yield scrapy.Request(next_page_url)
+        # path to href link
+        next_page_url = response.xpath('/html/body/div/table/tr[2]/td/table/tr/td[2]/div[2]/table/tr/td[10]/a/@href').extract_first()
+        # ERROR : td[10] for page 2, td[11] for page 3, td[12] for page 5 and so on....
+        # maybe find by text '>'???
+
+        # next_page_url = response.xpath('//*[@id="content"]/table/tbody/tr[2]/td/table/tbody/tr/td[2]/div[2]/table/tbody/tr/td[8]/a/')
+       	absolute_next_page_url = response.urljoin(next_page_url)
+       	yield scrapy.Request(absolute_next_page_url)
